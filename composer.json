@@ -1,0 +1,30 @@
+{
+    "name": "laundrigo/telegram-logger",
+    "description": "A self-configuring Laravel package for Telegram logging.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LaundriGo Team"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "monolog/monolog": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaundriGo\\TelegramLogger\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaundriGo\\TelegramLogger\\TelegramLoggingServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
