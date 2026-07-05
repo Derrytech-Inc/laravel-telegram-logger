@@ -1,6 +1,6 @@
 <?php
 
-namespace LaundriGo\TelegramLogger;
+namespace Derrytech\TelegramLogger;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
@@ -39,5 +39,30 @@ class TelegramLoggingServiceProvider extends ServiceProvider
                 ),
             ]);
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->updateEnvExample();
+        }
+    }
+
+    /**
+     * Update the host application's .env.example file with Telegram keys.
+     */
+    protected function updateEnvExample(): void
+    {
+        $path = base_path('.env.example');
+
+        if (!file_exists($path)) {
+            return;
+        }
+
+        $content = file_get_contents($path);
+
+        if (str_contains($content, 'TELEGRAM_BOT_TOKEN')) {
+            return;
+        }
+
+        $stub = "\n# Telegram Logger\nTELEGRAM_BOT_TOKEN=\nTELEGRAM_CHAT_ID=\nTELEGRAM_LOG_LEVEL=debug\n";
+        file_put_contents($path, $content . $stub);
     }
 }
