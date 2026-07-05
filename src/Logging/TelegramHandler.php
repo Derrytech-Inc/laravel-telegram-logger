@@ -1,6 +1,6 @@
 <?php
 
-namespace LaundriGo\TelegramLogger\Logging;
+namespace Derrytech\TelegramLogger\Logging;
 
 use Illuminate\Support\Str;
 use Monolog\Formatter\FormatterInterface;
