@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         executionOrder="depends,defects"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="Telegram Logger Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_NAME" value="TestApp"/>
+        <env name="TELEGRAM_BOT_TOKEN" value="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"/>
+        <env name="TELEGRAM_CHAT_ID" value="-100123456789"/>
+        <env name="TELEGRAM_LOG_LEVEL" value="debug"/>
+    </php>
+</phpunit>

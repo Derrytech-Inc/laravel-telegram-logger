@@ -2,9 +2,9 @@
 
 namespace Derrytech\TelegramLogger;
 
-use Illuminate\Support\ServiceProvider;
+use Derrytech\TelegramLogger\Logging\TelegramHandler;
 use Illuminate\Support\Facades\Log;
-use LaundriGo\TelegramLogger\Logging\TelegramHandler;
+use Illuminate\Support\ServiceProvider;
 use Monolog\Logger;
 
 class TelegramLoggingServiceProvider extends ServiceProvider
@@ -14,13 +14,21 @@ class TelegramLoggingServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Dynamically set telegram config if not already defined in logging.channels
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/telegram-logger.php',
+            'telegram-logger'
+        );
+
+        // Dynamically define telegram logging channel if not explicitly configured in host logging.channels
         if (empty($this->app['config']->get('logging.channels.telegram'))) {
             $this->app['config']->set('logging.channels.telegram', [
                 'driver' => 'telegram',
-                'token' => env('TELEGRAM_BOT_TOKEN'),
-                'chat_id' => env('TELEGRAM_CHAT_ID'),
-                'level' => env('TELEGRAM_LOG_LEVEL', env('LOG_LEVEL', 'debug')),
+                'token' => $this->app['config']->get('telegram-logger.token'),
+                'chat_id' => $this->app['config']->get('telegram-logger.chat_id'),
+                'topic_id' => $this->app['config']->get('telegram-logger.topic_id'),
+                'level' => $this->app['config']->get('telegram-logger.level', 'debug'),
+                'timeout' => $this->app['config']->get('telegram-logger.timeout', 2),
+                'enabled' => $this->app['config']->get('telegram-logger.enabled', true),
             ]);
         }
     }
@@ -30,39 +38,30 @@ class TelegramLoggingServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/telegram-logger.php' => config_path('telegram-logger.php'),
+            ], 'telegram-logger-config');
+        }
+
         Log::extend('telegram', function ($app, array $config) {
+            $enabled = $config['enabled'] ?? config('telegram-logger.enabled', true);
+            $token = $config['token'] ?? config('telegram-logger.token', '');
+            $chatId = $config['chat_id'] ?? config('telegram-logger.chat_id', '');
+            $topicId = $config['topic_id'] ?? config('telegram-logger.topic_id');
+            $level = $config['level'] ?? config('telegram-logger.level', 'debug');
+            $timeout = (int) ($config['timeout'] ?? config('telegram-logger.timeout', 2));
+
             return new Logger('telegram', [
                 new TelegramHandler(
-                    $config['token'] ?? '',
-                    $config['chat_id'] ?? '',
-                    $config['level'] ?? 'debug'
+                    botToken: (string) $token,
+                    chatId: (string) $chatId,
+                    level: $level,
+                    topicId: $topicId !== null ? (int) $topicId : null,
+                    timeout: $timeout,
+                    enabled: (bool) $enabled
                 ),
             ]);
         });
-
-        if ($this->app->runningInConsole()) {
-            $this->updateEnvExample();
-        }
-    }
-
-    /**
-     * Update the host application's .env.example file with Telegram keys.
-     */
-    protected function updateEnvExample(): void
-    {
-        $path = base_path('.env.example');
-
-        if (!file_exists($path)) {
-            return;
-        }
-
-        $content = file_get_contents($path);
-
-        if (str_contains($content, 'TELEGRAM_BOT_TOKEN')) {
-            return;
-        }
-
-        $stub = "\n# Telegram Logger\nTELEGRAM_BOT_TOKEN=\nTELEGRAM_CHAT_ID=\nTELEGRAM_LOG_LEVEL=debug\n";
-        file_put_contents($path, $content . $stub);
     }
 }
