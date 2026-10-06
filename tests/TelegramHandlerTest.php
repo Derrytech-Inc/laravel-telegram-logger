@@ -99,10 +99,12 @@ class TelegramHandlerTest extends TestCase
         $handler->handle($record);
 
         Http::assertSent(function ($request) {
+            $data = $request->data();
+
             return $request->url() === 'https://api.telegram.org/botbot123456:secret/sendMessage'
-                && $request['chat_id'] === '-100987654321'
-                && $request['message_thread_id'] === 42
-                && $request['parse_mode'] === 'HTML';
+                && ($data['chat_id'] ?? null) === '-100987654321'
+                && ($data['message_thread_id'] ?? null) === 42
+                && ($data['parse_mode'] ?? null) === 'HTML';
         });
     }
 
