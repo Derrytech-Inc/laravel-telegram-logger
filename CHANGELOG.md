@@ -5,6 +5,14 @@ All notable changes to `derrytech/telegram-logger` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-10-06
+
+### Fixed
+- Installable on Laravel 13 / Guzzle 8: depend on `illuminate/http` (which brings the Guzzle version each Laravel release supports) instead of pinning `guzzlehttp/guzzle ^7.5`.
+
+### Changed
+- CI matrix now covers Laravel 13 (PHP 8.3, 8.4).
+
 ## [1.0.0] - 2026-10-06
 
 ### Added
