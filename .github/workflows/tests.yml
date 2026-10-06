@@ -32,13 +32,15 @@ jobs:
           coverage: none
 
       - name: Install dependencies
+        env:
+          COMPOSER_NO_AUDIT: 1
         run: |
           if [ "${{ matrix.laravel }}" = "10.*" ]; then
-            TESTBENCH="8.*"
+            TESTBENCH="^8.0"
           elif [ "${{ matrix.laravel }}" = "11.*" ]; then
-            TESTBENCH="9.*"
+            TESTBENCH="^9.0"
           else
-            TESTBENCH="10.*"
+            TESTBENCH="^10.0"
           fi
           composer require "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction --no-audit

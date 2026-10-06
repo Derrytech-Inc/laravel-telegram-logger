@@ -44,7 +44,15 @@
         "test": "vendor/bin/phpunit"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "policy": {
+            "advisories": {
+                "block": false,
+                "ignore": [
+                    "laravel/framework"
+                ]
+            }
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true
