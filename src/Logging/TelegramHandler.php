@@ -99,14 +99,22 @@ class TelegramHandler extends AbstractProcessingHandler
         $timeStr = '<i>' . $this->escapeHtml(now()->toDateTimeString()) . '</i>';
 
         $rawMessage = (string) $record->message;
+        $isMessageTruncated = mb_strlen($rawMessage) > 2000;
         $safeMessage = $this->escapeHtml(mb_substr($rawMessage, 0, 2000));
+        if ($isMessageTruncated) {
+            $safeMessage .= "\n... [Truncated]";
+        }
 
         $output = "{$header}\n<pre>{$safeMessage}</pre>\n{$timeStr}";
 
         if (!empty($record->context)) {
             $contextText = $this->formatContext($record->context);
             if (!empty($contextText)) {
+                $isContextTruncated = mb_strlen($contextText) > 1200;
                 $safeContext = $this->escapeHtml(mb_substr($contextText, 0, 1200));
+                if ($isContextTruncated) {
+                    $safeContext .= "\n... [Truncated]";
+                }
                 $output .= "\n\n<b>Context / Trace:</b>\n<pre>{$safeContext}</pre>";
             }
         }

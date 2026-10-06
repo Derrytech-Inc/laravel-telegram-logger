@@ -2,9 +2,11 @@
 
 A lightweight, self-configuring Laravel package that seamlessly routes log records and exception notifications to a Telegram chat, channel, or supergroup topic.
 
-[![PHP Version](https://img.shields.io/badge/php-%5E8.2-8892BF.svg)](https://php.net)
-[![Laravel Version](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x%20%7C%2012.x%20%7C%2013.x-FF2D20.svg)](https://laravel.com)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Latest Version](https://img.shields.io/github/v/release/Derrytech-Inc/laravel-telegram-logger?style=flat-square)](https://github.com/Derrytech-Inc/laravel-telegram-logger/releases)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/Derrytech-Inc/laravel-telegram-logger/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/Derrytech-Inc/laravel-telegram-logger/actions)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.2-8892BF.svg?style=flat-square)](https://php.net)
+[![Laravel Version](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x%20%7C%2012.x%20%7C%2013.x-FF2D20.svg?style=flat-square)](https://laravel.com)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
 ---
 
