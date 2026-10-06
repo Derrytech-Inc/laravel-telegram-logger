@@ -98,8 +98,11 @@ class TelegramHandlerTest extends TestCase
         // Execute write via handle
         $handler->handle($record);
 
+        fwrite(STDERR, "\n[DEBUG RECORDED COUNT]: " . Http::recorded()->count() . "\n");
+
         Http::assertSent(function ($request) {
             $data = $request->data();
+            fwrite(STDERR, "[DEBUG REQUEST]: URL=" . $request->url() . " DATA=" . json_encode($data) . "\n");
 
             return $request->url() === 'https://api.telegram.org/botbot123456:secret/sendMessage'
                 && ($data['chat_id'] ?? null) === '-100987654321'

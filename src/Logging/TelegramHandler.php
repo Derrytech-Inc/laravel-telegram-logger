@@ -70,6 +70,9 @@ class TelegramHandler extends AbstractProcessingHandler
                 $payload
             );
         } catch (Throwable $e) {
+            if (defined('PHPUNIT_COMPOSER_INSTALL') || class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+                fwrite(STDERR, "\n[DEBUG WRITE EXCEPTION]: " . get_class($e) . ': ' . $e->getMessage() . " at " . $e->getFile() . ':' . $e->getLine() . "\n");
+            }
             // Silently catch exceptions to prevent recursive logging loops
         }
     }
