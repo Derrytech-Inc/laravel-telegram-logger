@@ -57,7 +57,7 @@ class TelegramLoggingServiceProvider extends ServiceProvider
                     botToken: (string) $token,
                     chatId: (string) $chatId,
                     level: $level,
-                    topicId: $topicId !== null ? (int) $topicId : null,
+                    topicId: filled($topicId) ? (int) $topicId : null,
                     timeout: $timeout,
                     enabled: (bool) $enabled
                 ),

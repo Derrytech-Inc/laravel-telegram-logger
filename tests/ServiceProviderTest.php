@@ -2,6 +2,7 @@
 
 namespace Derrytech\TelegramLogger\Tests;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
@@ -24,5 +25,15 @@ class ServiceProviderTest extends TestCase
         $this->assertInstanceOf(Logger::class, $logger);
         $this->assertEquals('telegram', $logger->getName());
         $this->assertCount(1, $logger->getHandlers());
+    }
+
+    public function test_empty_topic_id_is_not_sent(): void
+    {
+        Http::fake();
+        config(['logging.channels.telegram.topic_id' => '']);
+
+        Log::channel('telegram')->error('No topic');
+
+        Http::assertSent(fn ($request) => ! array_key_exists('message_thread_id', $request->data()));
     }
 }
